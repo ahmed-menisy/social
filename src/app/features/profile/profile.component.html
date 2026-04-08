@@ -1,0 +1,653 @@
+<div class="mx-auto max-w-7xl px-3 py-3.5">
+  <main class="min-w-0">
+    <div class="space-y-5 sm:space-y-6">
+     @if (profile&&myId!==profile._id) {
+       <button (click)="navService.goBack()"
+        class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-arrow-left"
+          aria-hidden="true"
+        >
+          <path d="m12 19-7-7 7-7"></path>
+          <path d="M19 12H5"></path></svg
+        >Back
+      </button>
+     }
+      @if (profile) {
+        <section
+          class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_2px_10px_rgba(15,23,42,.06)] sm:rounded-[28px]"
+        >
+          <div
+            class="group/cover bg-cover bg-center relative h-44 bg-[linear-gradient(112deg,#0f172a_0%,#1e3a5f_36%,#2b5178_72%,#5f8fb8_100%)] sm:h-52 lg:h-60"
+            [style]="
+              profile.cover
+                ? `background-image:linear-gradient(rgba(15, 23, 42, 0.22), rgba(15, 23, 42, 0.4)),
+           url(${profile.cover})
+          `
+                : ''
+            "
+          >
+            <div
+              class="absolute inset-0 bg-[radial-gradient(circle_at_20%_24%,rgba(255,255,255,.14)_0%,rgba(255,255,255,0)_36%)]"
+            ></div>
+            <div
+              class="absolute inset-0 bg-[radial-gradient(circle_at_86%_12%,rgba(186,230,253,.22)_0%,rgba(186,230,253,0)_44%)]"
+            ></div>
+            <div class="absolute -left-16 top-10 h-36 w-36 rounded-full bg-white/8 blur-3xl"></div>
+            <div
+              class="absolute right-8 top-6 h-48 w-48 rounded-full bg-[#c7e6ff]/10 blur-3xl"
+            ></div>
+            <div
+              class="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/25 to-transparent"
+            ></div>
+           @if (profile&&myId===profile._id) {
+             <div
+              class="pointer-events-none absolute right-2 top-2 z-10 flex max-w-[90%] flex-wrap items-center justify-end gap-1.5 opacity-100 transition duration-200 sm:right-3 sm:top-3 sm:max-w-none sm:gap-2 sm:opacity-0 sm:group-hover/cover:opacity-100 sm:group-focus-within/cover:opacity-100"
+            >
+              @if (profile.cover) {
+                <button
+                  (click)="openImageFullScreenService.openImagebyURL(profile.cover)"
+                  type="button"
+                  class="pointer-events-auto cursor-pointer inline-flex items-center gap-1 rounded-lg bg-black/45 px-2 py-1 text-[11px] font-bold text-white backdrop-blur transition hover:bg-black/60 sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-expand"
+                    aria-hidden="true"
+                  >
+                    <path d="m15 15 6 6"></path>
+                    <path d="m15 9 6-6"></path>
+                    <path d="M21 16v5h-5"></path>
+                    <path d="M21 8V3h-5"></path>
+                    <path d="M3 16v5h5"></path>
+                    <path d="m3 21 6-6"></path>
+                    <path d="M3 8V3h5"></path>
+                    <path d="M9 9 3 3"></path></svg
+                  >View cover
+                </button>
+              }
+
+              <label
+                class="pointer-events-auto inline-flex cursor-pointer items-center gap-1 rounded-lg bg-black/45 px-2 py-1 text-[11px] font-bold text-white backdrop-blur transition hover:bg-black/60 sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-xs"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-camera"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"
+                  ></path>
+                  <circle cx="12" cy="13" r="3"></circle></svg
+                >{{ profile.cover ? 'Change cover' : 'Add cover'
+                }}<input
+                  (change)="readImg($event, 'cover')"
+                  accept="image/*"
+                  class="hidden"
+                  type="file"
+              /></label>
+              @if (profile.cover) {
+                <button
+                  (click)="removeCover()"
+                  type="button"
+                  class="pointer-events-auto cursor-pointer inline-flex items-center gap-1 rounded-lg bg-black/45 px-2 py-1 text-[11px] font-bold text-white backdrop-blur transition hover:bg-black/60 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-trash2 lucide-trash-2"
+                    aria-hidden="true"
+                  >
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg
+                  >Remove
+                </button>
+              }
+            </div>
+           }
+          </div>
+          <div class="relative -mt-12 px-3 pb-5 sm:-mt-16 sm:px-8 sm:pb-6">
+            <div class="rounded-3xl border border-white/60 bg-white p-5 backdrop-blur-xl sm:p-7">
+              <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="min-w-0">
+                  <div class="flex items-end gap-4">
+                    <div class="group/avatar relative shrink-0">
+                      <button
+                        (click)="openImageFullScreenService.openImagebyURL(profile.photo)"
+                        type="button"
+                        class="cursor-zoom-in rounded-full"
+                      >
+                        <img
+                          [alt]="profile.name"
+                          class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-md ring-2 ring-[#dbeafe]"
+                          [src]="profile.photo"
+                        /></button
+                      ><button
+                        (click)="openImageFullScreenService.openImagebyURL(profile.photo)"
+                        type="button"
+                        class="absolute bottom-1 left-1 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-white text-[#1877f2] opacity-100 shadow-sm ring-1 ring-slate-200 transition duration-200 hover:bg-slate-50 sm:opacity-0 sm:group-hover/avatar:opacity-100 sm:group-focus-within/avatar:opacity-100"
+                        title="View profile photo"
+                        aria-label="View profile photo"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-expand"
+                          aria-hidden="true"
+                        >
+                          <path d="m15 15 6 6"></path>
+                          <path d="m15 9 6-6"></path>
+                          <path d="M21 16v5h-5"></path>
+                          <path d="M21 8V3h-5"></path>
+                          <path d="M3 16v5h5"></path>
+                          <path d="m3 21 6-6"></path>
+                          <path d="M3 8V3h5"></path>
+                          <path d="M9 9 3 3"></path>
+                        </svg></button
+                      >
+                    @if (profile&&myId===profile._id) {
+                       <label
+                        class="absolute bottom-1 right-1 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#1877f2] text-white opacity-100 shadow-sm transition duration-200 hover:bg-[#166fe5] sm:opacity-0 sm:group-hover/avatar:opacity-100 sm:group-focus-within/avatar:opacity-100"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="17"
+                          height="17"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-camera"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"
+                          ></path>
+                          <circle cx="12" cy="13" r="3"></circle></svg
+                        ><input
+                          (change)="readImg($event, 'photo')"
+                          accept="image/*"
+                          class="hidden"
+                          type="file"
+                        />
+                      </label>
+                    }
+                    </div>
+                    <div class="min-w-0 pb-1">
+                      <h2
+                        class="truncate text-2xl font-black tracking-tight text-slate-900 sm:text-4xl"
+                      >
+                        {{ profile.name }}
+                      </h2>
+                      <p class="mt-1 text-lg font-semibold text-slate-500 sm:text-xl">
+                        @{{ profile.username }}
+                      </p>
+                      <div
+                        class="mt-3 inline-flex items-center gap-2 rounded-full border border-[#d7e7ff] bg-[#eef6ff] px-3 py-1 text-xs font-bold text-[#0b57d0]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="13"
+                          height="13"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-users"
+                          aria-hidden="true"
+                        >
+                          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                          <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                          <circle cx="9" cy="7" r="4"></circle></svg
+                        >member profile
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               @if (profile&&myId!==profile._id) {
+                 <button (click)="followUnfollowUserItem(profile._id)"
+                  class="inline-flex cursor-pointer items-center gap-1.75 px-4.5 py-2.25 rounded-[10px] text-[13.5px] font-semibold bg-[#2563eb] text-white shadow-[0_2px_8px_rgba(37,99,235,.25)] transition hover:-translate-y-px hover:bg-[#1d4ed8]"
+                  [disabled]="followLoading"
+                >
+                  @if (followLoading) {
+                    <i class="fa-solid fa-user"></i>
+                    updating...
+                  }@else {
+                   @if (isFollowing) {<i class="fa-solid fa-user-check"></i> following}
+                   @else {<i class="fa-solid fa-user-plus"></i> follow}
+                  }
+                
+                </button>
+               }
+              </div>
+              <div class="">
+                <!-- stats bar -->
+                <div class="flex flex-wrap gap-2 md:px-7 border-t border-[#e4e7ed] mt-7 py-4.5">
+                  <!-- Followers -->
+                  <a
+                    class="flex items-center gap-2.5 flex-1 min-w-25 px-4.5 py-3.5 rounded-[10px] bg-[#f7f8fa] border border-[#e4e7ed] transition hover:bg-[#eff4ff] hover:border-[#bfcfff] hover:-translate-y-0.5 hover:shadow-sm"
+                  >
+                    <div
+                      class="w-9 h-9 rounded-[9px] flex items-center justify-center bg-[#dbeafe] text-[#2563eb]"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        class="w-4.25 h-4.25"
+                      >
+                        <circle cx="8" cy="5" r="2.5" />
+                        <path d="M2 13c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+                      </svg>
+                    </div>
+
+                    <div class="flex flex-col gap-px">
+                      <span class="text-[19px] font-bold tracking-tight">
+                        {{ profile.followersCount }}</span
+                      >
+                      <span
+                        class="text-[11px] uppercase tracking-[0.5px] text-[#9aa0b0] font-medium"
+                      >
+                        Followers
+                      </span>
+                    </div>
+                  </a>
+
+                  <!-- Following -->
+                  <a [routerLink]="['/friends',profile._id]"
+                    class="flex cursor-pointer items-center gap-2.5 flex-1 min-w-25 px-4.5 py-3.5 rounded-[10px] bg-[#f7f8fa] border border-[#e4e7ed] transition hover:bg-[#eff4ff] hover:border-[#bfcfff] hover:-translate-y-0.5 hover:shadow-sm"
+                  >
+                    <div
+                      class="w-9 h-9 rounded-[9px] flex items-center justify-center bg-[#ede9fe] text-[#7c3aed]"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        class="w-4.25 h-4.25"
+                      >
+                        <circle cx="5.5" cy="5" r="2.5" />
+                        <circle cx="10.5" cy="5" r="2.5" />
+                        <path
+                          d="M1 13c0-3 2-5 4.5-5M15 13c0-3-2-5-4.5-5M8 13c0-2.5 1.5-4.5 4-4.5"
+                        />
+                      </svg>
+                    </div>
+
+                    <div class="flex flex-col gap-px">
+                      <span class="text-[19px] font-bold tracking-tight">
+                        {{ profile.followingCount }}</span
+                      >
+                      <span
+                        class="text-[11px] uppercase tracking-[0.5px] text-[#9aa0b0] font-medium"
+                      >
+                        Following
+                      </span>
+                    </div>
+                  </a>
+
+                @if (profile && profile._id===myId) {
+                    <!-- Saved -->
+                  <a
+                    class="flex items-center gap-2.5 flex-1 min-w-25 px-4.5 py-3.5 rounded-[10px] bg-[#f7f8fa] border border-[#e4e7ed] transition hover:bg-[#eff4ff] hover:border-[#bfcfff] hover:-translate-y-0.5 hover:shadow-sm"
+                  >
+                    <div
+                      class="w-9 h-9 rounded-[9px] flex items-center justify-center bg-[#fef3c7] text-[#d97706]"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        class="w-4.25 h-4.25"
+                      >
+                        <path d="M3 2h10a1 1 0 011 1v10l-4-2.5L6 13V3a1 1 0 011-1z" />
+                      </svg>
+                    </div>
+
+                    <div class="flex flex-col gap-px">
+                      <span class="text-[19px] font-bold tracking-tight">{{
+                        profile.bookmarksCount === 0
+                          ? profile.bookmarksCount
+                          : profile.bookmarksCount - 1
+                      }}</span>
+                      <span
+                        class="text-[11px] uppercase tracking-[0.5px] text-[#9aa0b0] font-medium"
+                      >
+                        Saved posts
+                      </span>
+                    </div>
+                  </a>
+                }
+
+                  <!-- Posts -->
+                  <a
+                    class="flex items-center gap-2.5 flex-1 min-w-25 px-4.5 py-3.5 rounded-[10px] bg-[#f7f8fa] border border-[#e4e7ed] transition hover:bg-[#eff4ff] hover:border-[#bfcfff] hover:-translate-y-0.5 hover:shadow-sm"
+                  >
+                    <div
+                      class="w-9 h-9 rounded-[9px] flex items-center justify-center bg-[#ecfdf5] text-[#10b981]"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        class="w-4.25 h-4.25"
+                      >
+                        <rect x="2" y="3" width="12" height="10" rx="1.5" />
+                        <path d="M5 7h6M5 10h4" />
+                      </svg>
+                    </div>
+
+                    <div class="flex flex-col gap-px">
+                      <span class="text-[19px] font-bold tracking-tight">{{ postsCount }}</span>
+                      <span
+                        class="text-[11px] uppercase tracking-[0.5px] text-[#9aa0b0] font-medium"
+                      >
+                        {{myId===profile.id?'My':'User'}} posts
+                      </span>
+                    </div>
+                  </a>
+
+                 
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <h3 class="text-sm font-extrabold text-slate-800">About</h3>
+                  <div class="mt-3 space-y-2 text-sm text-slate-600">
+                    <p class="flex items-center gap-2">
+                      <i class="fa-regular fa-envelope"></i>
+                      {{ profile.email }}
+                    </p>
+                    <p class="flex items-center gap-2">
+                      <i class="fa-regular fa-calendar"></i
+                      >{{ `Created at: ${(profile.createdAt | date)}` }}
+                    </p>
+                    <p class="flex items-center gap-2">
+                      <i
+                        class="fa-solid"
+                        [class]="
+                          profile.gender === 'male'
+                            ? 'fa-mars text-blue-700'
+                            : 'fa-venus text-pink'
+                        "
+                      ></i>
+                      {{ profile.gender }}
+                    </p>
+                    <p class="flex items-center gap-2">
+                      <i class="fa-regular fa-calendar"></i>
+                      {{ `Date of birth: ${(profile.dateOfBirth | date)}` }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      }
+@if (profile&&myId===profile._id) {
+  
+      <!-- view my posts or bookmarked posts  -->
+      <section class="my-4">
+        <div
+          class="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm"
+        >
+          <div
+            class="grid w-full grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1.5 sm:inline-flex sm:w-auto sm:gap-0"
+          >
+            <button
+              (click)="getMyPostsData()"
+              [class]="
+                activeTab === 'myposts'
+                  ? 'bg-white text-[#1877f2] shadow-sm'
+                  : ' text-slate-600 hover:text-slate-900'
+              "
+              class="inline-flex items-center cursor-pointer justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-file-text"
+                aria-hidden="true"
+              >
+                <path
+                  d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+                ></path>
+                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                <path d="M10 9H8"></path>
+                <path d="M16 13H8"></path>
+                <path d="M16 17H8"></path></svg
+              >My Posts</button
+            ><button
+              (click)="getbookmarksData()"
+              [class]="
+                activeTab === 'saved'
+                  ? 'bg-white text-[#1877f2] shadow-sm'
+                  : ' text-slate-600 hover:text-slate-900'
+              "
+              class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-bookmark"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"
+                ></path></svg
+              >Saved
+            </button>
+          </div>
+          <span class="rounded-full bg-[#e7f3ff] px-3 py-1 text-xs font-bold text-[#1877f2]">{{
+            PostsList.length
+          }}</span>
+        </div>
+        
+      </section>
+
+}
+<div class="space-y-3">
+        @if (postsLoading) {
+           <app-loading [loadingType]="'posts'"></app-loading>
+           <app-loading [loadingType]="'posts'"></app-loading>
+
+        }@else {
+            @for (post of PostsList; track post._id) {
+            <app-single-post
+              (callParentFunction)="callBackfunction()"
+              [post]="post"
+            ></app-single-post>
+          }@empty {
+          <p class="rounded-xl text-center border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+            @if(profile && profile._id!==myId){No posts yet.}
+            @else{
+              {{activeTab==='myposts'?'You have not posted yet.':'No saved posts yet.'}}
+            }
+            
+          </p>
+          }
+        }
+        </div>
+      @if (openCoverPrivacy) {
+        <div class="fixed inset-0 z-90 flex items-center justify-center bg-black/60 p-4">
+          <div class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
+            <h3 class="text-lg font-extrabold text-slate-900">Cover post privacy</h3>
+            <p class="mt-1 text-sm text-slate-500">
+              Choose who can see the post generated for your new cover photo.
+            </p>
+            <div class="mt-4">
+              <select
+                [formControl]="coverPrivacy"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 outline-none focus:border-[#1877f2]"
+              >
+                <option value="public">Public</option>
+                <option value="following">Followers</option>
+                <option value="only_me">Only me</option>
+              </select>
+            </div>
+            <div class="mt-5 flex items-center justify-end gap-2">
+              <button
+                (click)="closeCoverPrivacyWindow()"
+                type="button"
+                class="inline-flex items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
+              >
+                Cancel</button
+              ><button
+                (click)="submitUploadCover()"
+                type="button"
+                class="inline-flex items-center rounded-lg bg-[#1877f2] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#166fe5] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Save cover
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (openPhotoPrivacy) {
+        <div class="fixed inset-0 z-90 flex items-center justify-center bg-black/70 p-4">
+          <div
+            class="w-full max-w-140 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:p-5"
+          >
+            <div class="mb-3">
+              <h3 class="text-lg font-extrabold text-slate-900">Adjust profile photo</h3>
+              <p class="text-sm text-slate-500">
+                Drag to reposition and use zoom for perfect framing.
+              </p>
+            </div>
+            <div class="mx-auto w-full max-w-85 overflow-x-auto pb-1">
+              <div
+                class="relative h-80 w-[320px] touch-none overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200"
+              >
+                <img
+                  alt="Crop preview"
+                  draggable="false"
+                  class="pointer-events-none absolute left-1/2 top-1/2 select-none"
+                  [src]="profileUrl"
+                  [style.transform]="transformStyle"
+                  style="
+                    width: 300px;
+                    height: 300px;
+                    max-width: none;
+                    max-height: none;
+                    transform: translate(calc(-50% + 0px), calc(-50% + 0px)) scale(1.06667);
+                    transform-origin: center center;
+                  "
+                />
+              </div>
+            </div>
+            <div class="mt-4 space-y-2">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-500">
+                <span>Zoom</span><span>{{ zoomLevel.value | number:'1.2-2' }}x</span>
+              </div>
+              <input
+              type="range"
+              [formControl]="zoomLevel"
+                min="1"
+                max="3"
+                step="0.01"
+                class="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-[#1877f2]"
+                type="range"
+                value="1"
+              />
+            </div>
+            <div class="mt-4">
+              <p class="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
+                Post privacy
+              </p>
+              <select
+                [formControl]="photoPrivacy"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 outline-none focus:border-[#1877f2]"
+              >
+                <option value="public">Public</option>
+                <option value="following">Followers</option>
+                <option value="only_me">Only me</option>
+              </select>
+            </div>
+            <div class="mt-5 flex items-center justify-end gap-2">
+              <button
+                (click)="closePhotoPrivacyWindow()"
+                type="button"
+                class="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
+              >
+                Cancel</button
+              ><button
+                (click)="submitUploadProfilePhoto()"
+                type="button"
+                class="inline-flex cursor-pointer items-center rounded-lg bg-[#1877f2] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#166fe5] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Save photo
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </main>
+</div>
